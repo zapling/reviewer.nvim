@@ -21,17 +21,17 @@ local get_parsed_origin_url = function()
         return nil
     end
 
-    local host = util.get_substr(origin_url, "@.+:")
-    local namespace = util.get_substr(origin_url, ":.+/")
-    local repo = util.get_substr(origin_url, "/.+%.git")
+    local host = util.get_substr(origin_url, '@.+:')
+    local namespace = util.get_substr(origin_url, ':.+/')
+    local repo = util.get_substr(origin_url, '/.+%.git')
 
-    if host == "" or namespace == "" or repo == "" then
-        return ""
+    if host == '' or namespace == '' or repo == '' then
+        return ''
     end
 
-    host = host:sub(2, host:len()-1)                -- remove starting "@" and ending ":"
-    namespace = namespace:sub(2, namespace:len()-1) -- remove starting ":" and ending "/"
-    repo = repo:sub(2, repo:len()-4)                -- remove starting "/" and ending ".git"
+    host = host:sub(2, host:len()-1)                -- remove starting '@' and ending ':'
+    namespace = namespace:sub(2, namespace:len()-1) -- remove starting ':' and ending '/'
+    repo = repo:sub(2, repo:len()-4)                -- remove starting '/' and ending '.git'
 
     local parts = {
         host = host,
@@ -45,8 +45,8 @@ end
 local get_current_branch = function()
     local branch = nil
     Job:new({
-        command = "git",
-        args = { "branch", "--show-current" },
+        command = 'git',
+        args = { 'branch', '--show-current' },
         on_exit = function(j, exit_code)
             if exit_code ~= 0 then
                 return
@@ -58,6 +58,22 @@ local get_current_branch = function()
     return branch
 end
 
+local get_main_branch = function()
+    local branch = nil
+    Job:new({
+        command = 'git',
+        args = { 'rev-parse', '--abbrev-ref', 'origin/HEAD' },
+        on_exit = function(j, exit_code)
+            if exit_code ~= 0 then
+                return
+            end
+
+            branch = j:result()[1]
+        end,
+    }):sync()
+    branch = branch:sub(8, branch:len()) -- remove 'origin/' part
+    return branch
+end
 
 M.get_current_context = function()
     local origin = get_parsed_origin_url()
@@ -74,7 +90,10 @@ M.get_current_context = function()
         host = origin.host,
         namespace = origin.namespace,
         repo = origin.repo,
-        branch = branch,
+        branch = {
+            current = branch,
+            main = get_main_branch()
+        },
     }
 end
 
