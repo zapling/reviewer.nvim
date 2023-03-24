@@ -1,9 +1,8 @@
 local M = {}
 
 local command = function(opts)
-    vim.api.nvim_echo({
-        {"Hello World"}
-    }, false, {})
+    local git_context = require('reviewer.git').get_current_context()
+    print(vim.inspect(git_context))
 end
 
 M.setup = function()
