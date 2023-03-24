@@ -97,4 +97,20 @@ M.get_current_context = function()
     }
 end
 
+M.get_merge_base = function(source_branch, target_branch)
+    local commit_hash = nil
+    Job:new({
+        command = 'git',
+        args = { 'merge-base', target_branch, source_branch },
+        on_exit = function(j, exit_code)
+            if exit_code ~= 0 then
+                return
+            end
+
+            commit_hash = j:result()[1]
+        end,
+    }):sync()
+    return commit_hash
+end
+
 return M
