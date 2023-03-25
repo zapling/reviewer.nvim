@@ -1,6 +1,15 @@
 local M = {}
 
 local default_config = {
+    providers = {
+        gitlab = {
+            host = 'gitlab.com',
+            opts = {
+                base_url = 'https://gitlab.com',
+                access_token = '',
+            }
+        },
+    },
     debug = {
         logger = {
             use_file = false,
