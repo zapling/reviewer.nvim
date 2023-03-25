@@ -1,6 +1,6 @@
 # reviewer.nvim
 
-> **Warning**: This plugin is still in early development, expect features change and break.
+> **Warning**: This plugin is still in early development, expect features to change and even break.
 
 Review code inside your favourite editor without ever having to leave it, the future is here.
 
