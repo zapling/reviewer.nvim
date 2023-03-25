@@ -123,7 +123,7 @@ log.new = function(config, standalone)
     if config.use_file then
       local fp = io.open(outfile, "a")
       local str = string.format("[%-6s%s] %s: %s\n",
-      nameupper, os.date(), lineinfo, msg)
+      nameupper, os.date("%d/%m-%y %H:%M:%S"), lineinfo, msg)
       fp:write(str)
       fp:close()
     end
