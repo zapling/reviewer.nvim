@@ -11,3 +11,7 @@ require("lazy").setup({{
     dependencies = {'sindrets/diffview.nvim', 'nvim-lua/plenary.nvim'}
 }})
 ```
+
+## Usage
+
+- `:Review` show a diff between the current branch and main
