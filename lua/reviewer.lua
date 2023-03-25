@@ -1,4 +1,5 @@
 local git = require('reviewer.git')
+local config = require('reviewer.config')
 local diffview = require('diffview')
 
 local M = {}
@@ -16,7 +17,8 @@ local command = function(opts)
     diffview.open(merge_base)
 end
 
-M.setup = function()
+M.setup = function(cfg)
+    config.set(cfg)
     vim.api.nvim_create_user_command('Review', function(opts) command(opts) end, { nargs = '?' })
 end
 
