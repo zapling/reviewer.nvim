@@ -10,10 +10,20 @@ Powered by the awesome [diffview.nvim](https://github.com/sindrets/diffview.nvim
 
 ```lua
 -- lazy.nvim
-require("lazy").setup({{
+require('lazy').setup({{
     'zapling/reviewer.nvim',
     dependencies = {'sindrets/diffview.nvim', 'nvim-lua/plenary.nvim'}
 }})
+```
+
+## Setup
+
+```lua
+require('reviewer').setup({
+    providers = {
+        gitlab = {opts = {access_token = os.getenv("GITLAB_ACCESS_TOKEN")}}
+    }
+})
 ```
 
 ## Usage
