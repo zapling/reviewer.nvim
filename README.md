@@ -19,3 +19,4 @@ require("lazy").setup({{
 ## Usage
 
 - `:Review` show a diff between the current branch and main
+- `:Reivew stop` close the diff

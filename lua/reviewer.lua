@@ -1,25 +1,21 @@
-local git = require('reviewer.git')
 local config = require('reviewer.config')
-local diffview = require('diffview')
+local command = require('reviewer.command')
 
 local M = {}
 
-local command = function(opts)
-    local git_context = git.get_current_context()
-    if git_context == nil then
-        vim.api.nvim_echo({
-            {'Reviewer: Not in a git repository', 'ErrorMsg'}
-        }, false, {})
-        return
+local cmd = function(opts)
+    if opts.args == "" or opts.args == "start" then
+        return command.start_review()
     end
 
-    local merge_base = git.get_merge_base(git_context.branch.current, git_context.branch.main)
-    diffview.open(merge_base)
+    if opts.args == "stop" then
+        return command.stop_review()
+    end
 end
 
 M.setup = function(cfg)
     config.set(cfg)
-    vim.api.nvim_create_user_command('Review', function(opts) command(opts) end, { nargs = '?' })
+    vim.api.nvim_create_user_command('Review', function(opts) cmd(opts) end, { nargs = '?' })
 end
 
 return M
