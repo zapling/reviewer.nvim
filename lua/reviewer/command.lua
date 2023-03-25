@@ -1,5 +1,5 @@
 local git = require('reviewer.git')
-local provider = require('reviewer.provider')
+local config = require('reviewer.config')
 local diffview = require('diffview')
 
 local M = {}
@@ -13,8 +13,11 @@ M.start_review = function()
         return
     end
 
-    provider.get(git_context.host)
-    -- TODO: Get provider object and run init func?
+    local provider_config = config.get_provider(git_context.host)
+    if provider_config ~= nil then
+        local provider = provider_config.get_provider()
+        provider.setup(provider_config.opts)
+    end
 
     local merge_base = git.get_merge_base(git_context.branch.current, git_context.branch.main)
     diffview.open(merge_base)
