@@ -49,4 +49,24 @@ M.get_current_user = function()
     return nil
 end
 
+-- https://docs.gitlab.com/ee/api/projects.html#search-for-projects-by-name
+M.get_project = function(name)
+    local endpoint = 'projects?search='  .. name
+    local response = M._request(endpoint, "GET", nil)
+    if response ~= nil and response.status == 200 then
+        return vim.fn.json_decode(response.body)
+    end
+    return nil
+end
+
+-- https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
+M.get_project_merge_requests = function(project_id)
+    local endpoint = 'projects/' .. project_id .. '/merge_requests?state=opened'
+    local response = M._request(endpoint, 'GET', nil)
+    if response ~= nil and response.status == 200 then
+        return vim.fn.json_decode(response.body)
+    end
+    return nil
+end
+
 return M

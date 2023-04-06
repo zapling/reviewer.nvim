@@ -11,6 +11,10 @@ local cmd = function(opts)
     if opts.args == "stop" then
         return command.stop_review()
     end
+
+    if opts.args == "list" then
+        return command.list_reviews()
+    end
 end
 
 M.setup = function(cfg)
