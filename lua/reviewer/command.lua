@@ -37,8 +37,26 @@ M.start_review = function()
         }, false, {})
     end
 
-    local merge_base = git.get_merge_base(git_context.branch.current, git_context.branch.main)
+    local merge_request = M._review_provider.get_merge_request(git_context.branch.current)
+
+    local merge_base_params = {git_context.branch.current, git_context.branch.main}
+
+    -- found merge request, set target branch param
+    if merge_request ~= nil then
+        merge_base_params[2] = merge_request.target_branch
+    end
+
+    local merge_base = git.get_merge_base(unpack(merge_base_params))
     diffview.open(merge_base)
+
+    local display_message = 'No merge request found, showing diff against main'
+    if merge_request ~= nil then
+        display_message = string.format('Reviewing: (%d) %s', merge_request.iid, merge_request.title)
+    end
+
+    vim.api.nvim_echo({
+        {display_message, ''}
+    }, false, {})
 end
 
 M.list_reviews = function()

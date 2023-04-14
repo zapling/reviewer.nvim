@@ -16,6 +16,20 @@ M.setup = function(opts, git_context)
     return project ~= nil
 end
 
+M.get_merge_request = function(branch)
+    local params = {['source_branch'] = branch}
+    local merge_request = M._client.get_project_merge_requests(M._project_id, params)
+    if merge_request == nil then
+        return nil
+    end
+
+    return {
+        iid = merge_request[1].iid,
+        title = merge_request[1].title,
+        target_branch = merge_request[1].target_branch,
+    }
+end
+
 M.list_merge_requests = function()
     local merge_requests = M._client.get_project_merge_requests(M._project_id)
     if merge_requests == nil then

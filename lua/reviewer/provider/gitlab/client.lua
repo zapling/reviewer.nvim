@@ -60,8 +60,15 @@ M.get_project = function(name)
 end
 
 -- https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
-M.get_project_merge_requests = function(project_id)
+M.get_project_merge_requests = function(project_id, query_params)
     local endpoint = 'projects/' .. project_id .. '/merge_requests?state=opened'
+
+    if query_params ~= nil then
+        for k, v in pairs(query_params) do
+            endpoint = endpoint .. '&' .. k .. '=' .. v
+        end
+    end
+
     local response = M._request(endpoint, 'GET', nil)
     if response ~= nil and response.status == 200 then
         return vim.fn.json_decode(response.body)
